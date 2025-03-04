@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:platform_converter/modal/contact_modal.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
@@ -28,7 +29,25 @@ class DbHelper {
     });
   }
 
-  Future<void> insertData() async {
+  Future<void> insertData(ContactModal contact) async {
     final db = await database;
+    await db.insert(_contactTable, ContactModal.toMap(contact),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> updateData(ContactModal contact) async {
+    final db = await database;
+    await db.update(_contactTable, ContactModal.toMap(contact),
+        where: "id=?", whereArgs: [contact.id]);
+  }
+
+  Future<void> deleteData(var id) async {
+    final db = await database;
+    await db.delete(_contactTable, where: "id=?", whereArgs: [id]);
+  }
+
+  Future<List<Map<String, Object?>>> fetchData() async {
+    final db = await database;
+    return await db.query(_contactTable);
   }
 }
