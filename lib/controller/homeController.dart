@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platform_converter/modal/contact_modal.dart';
@@ -16,6 +16,9 @@ class HomeController extends GetxController {
 
   RxList<ContactModal> contactList = <ContactModal>[].obs;
   DateTime? pickDate;
+  DateTime? cupertinoTime;
+  RxBool isCupertino=false.obs;
+
   TimeOfDay? timePick;
   RxBool switchCondition = false.obs;
 
@@ -39,8 +42,55 @@ class HomeController extends GetxController {
         context: context,
         firstDate: DateTime(DateTime.monthsPerYear),
         lastDate: DateTime(2050));
-    contactDate = pickDate!.toIso8601String();
+    contactDate = "${pickDate!.month}-${pickDate!.day}-${pickDate!.year}";
     print("==================$pickDate");
+    update();
+  }
+
+  Future<void> datePickerCupertinoMethod(BuildContext context) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: CupertinoDatePicker(
+          initialDateTime: DateTime.now(),
+          mode: CupertinoDatePickerMode.date,
+          use24hFormat: true,
+          showDayOfWeek: true,
+          onDateTimeChanged: (value) {
+            pickDate = value;
+          },
+        ),
+      ),
+    );
+    contactDate = "${pickDate!.month} / ${pickDate!.day} / ${pickDate!.year}";
+    print("==================$pickDate");
+    update();
+  }
+
+  Future<void> timePickerCupertinoMethod(BuildContext context) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: CupertinoDatePicker(
+          initialDateTime: DateTime.now(),
+          mode: CupertinoDatePickerMode.time,
+          onDateTimeChanged: (newTime) {
+            cupertinoTime = newTime;
+          },
+        ),
+      ),
+    );
+    contactTime = '${cupertinoTime!.hour}:${cupertinoTime!.minute}';
     update();
   }
 
@@ -74,9 +124,9 @@ class HomeController extends GetxController {
         image: contactImage.value,
         name: txtName.text,
         chat: txtChat.text,
-        date: pickDate!.toIso8601String(),
+        date: contactDate!,
         phone: txtPhone.text,
-        time: timePick.toString());
+        time: contactTime!);
     await DbHelper.dbHelper.insertData(contact);
     await fetchData();
   }
@@ -101,9 +151,9 @@ class HomeController extends GetxController {
     txtName.clear();
     txtChat.clear();
     txtPhone.clear();
-    contactTime = null;
-    contactDate = null;
-    contactImage.value = 'assets/image/1.jpg';
+    contactTime = "";
+    contactDate = "";
+    contactImage.value = '';
   }
 
   Future<void> deleteDataFromList(int id) async {
@@ -113,6 +163,10 @@ class HomeController extends GetxController {
     } catch (e) {
       log('not delete');
     }
+  }
 
+  void widgetChange(bool value)
+  {
+    isCupertino.value=value;
   }
 }

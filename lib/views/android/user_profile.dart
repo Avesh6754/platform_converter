@@ -7,20 +7,22 @@ import 'package:platform_converter/controller/profileControler.dart';
 var profileController = Get.put(ProfileController());
 
 class UserProfile extends StatelessWidget {
-  const UserProfile({super.key});
+  UserProfile({super.key});
+  final ProfileController profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Text("Profile",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       Obx(
         () => Column(
           children: [
-            SwitchListTile(
-              title: Text("Change profile"),
-              value: profileController.isUpdate.value,
-              onChanged: (value) => profileController.profileChange(value),
+            ListTile(
+              
+              title: Text("Profile"),
+              leading: Icon(Icons.person),
+              subtitle: Text('Update profile'),
+              trailing: Switch(value: profileController.isUpdate.value,
+                onChanged: (value) => profileController.profileChange(value),),
             ),
             (profileController.isUpdate.value)
                 ? Center(
@@ -34,10 +36,10 @@ class UserProfile extends StatelessWidget {
                             () => CircleAvatar(
                               radius: 80,
                               backgroundImage: profileController
-                                      .contactImage.isEmpty
+                                      .userImage.value.isEmpty
                                   ? const AssetImage('assets/image/1.jpg')
                                   : FileImage(File(
-                                          profileController.contactImage.value))
+                                          profileController.userImage.value))
                                       as ImageProvider,
                             ),
                           ),
@@ -82,14 +84,13 @@ class UserProfile extends StatelessWidget {
           ],
         ),
       ),
-      Divider(),
-      Text("Theme",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       Obx(
-        () => SwitchListTile(
-          title: Text("Change Theme"),
-          value: profileController.isDark.value,
-          onChanged: (value) => profileController.themeChange(value),
+        () => ListTile(
+          title: Text("Theme"),
+          leading: Icon(Icons.sunny),
+          subtitle: Text('Update Theme'),
+         trailing: Switch( value: profileController.isDark.value,
+           onChanged: (value) => profileController.themeChange(value),),
         ),
       ),
     ]);

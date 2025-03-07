@@ -32,27 +32,29 @@ class _AddContactState extends State<AddContact> {
                 homeController.imagePickerMethod();
               },
               child: Obx(
-                () => CircleAvatar(
+                () => !homeController.contactImage.isNotEmpty?CircleAvatar(
                   radius: 80,
-                  backgroundImage: homeController.contactImage.isEmpty
-                      ? const AssetImage('assets/image/1.jpg')
-                      : FileImage(File(homeController.contactImage.value))
+                  backgroundImage: FileImage(File(homeController.contactImage.value))
                           as ImageProvider,
-                ),
+                ):
+                    CircleAvatar(
+                      radius: 80,
+                      child: Icon(Icons.camera_alt_outlined,),
+                    )
               ),
             ),
             const SizedBox(height: 20), // ✅ Added spacing
-            textMethod(
+            textMethodMaterial(
                 controller: homeController.txtName,
                 hint: 'Full Name',
                 isNumber: false,
                 iconData: Icon(Icons.person_2_outlined)),
-            textMethod(
+            textMethodMaterial(
                 controller: homeController.txtPhone,
                 hint: 'Phone Number',
                 isNumber: true,
                 iconData: Icon(Icons.phone_outlined)),
-            textMethod(
+            textMethodMaterial(
                 controller: homeController.txtChat,
                 hint: 'Chat Conversation',
                 isNumber: false,
@@ -67,9 +69,7 @@ class _AddContactState extends State<AddContact> {
                             controller.datePickerMethod(context);
                           },
                           icon: Icon(Icons.date_range)),
-                      (controller.pickDate != null)
-                          ? Text(controller.contactDate ?? 'Pick Date')
-                          : Text('Pick Date')
+                      Text(controller.contactDate ?? 'Pick Date')
                     ],
                   ),
                   Row(
@@ -79,9 +79,8 @@ class _AddContactState extends State<AddContact> {
                             homeController.timePickerMethod(context);
                           },
                           icon: Icon(Icons.access_time)),
-                      (controller.timePick != null)
-                          ? Text(controller.contactTime ?? "Pick Time")
-                          : Text('Pick Time')
+                          Text(controller.contactTime ?? "Pick Time")
+
                     ],
                   ),
                 ],
@@ -105,7 +104,7 @@ class _AddContactState extends State<AddContact> {
     );
   }
 }
-Padding textMethod(
+Padding textMethodMaterial(
     {required String hint,
       required TextEditingController controller,
       required bool isNumber,

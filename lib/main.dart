@@ -21,17 +21,28 @@ class _MyIosAppState extends State<MyIosApp> {
 
   @override
   Widget build(BuildContext context) {
-    return isMaterial?Obx(
-      () => MaterialApp(
+    return Obx(
+      () => (homeController.isCupertino.value)?MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: profileController.isDark.value ? ThemeMode.dark : ThemeMode.light,
-          home: TabBarWithPageView(toggleApp: toggleApp),
+          home: TabBarWithPageView(),
+        ):Obx(
+        () => CupertinoApp(
+            theme: CupertinoThemeData(
+            brightness: profileController.isDark.value ? Brightness.dark : Brightness.light,
+            primaryColor: CupertinoDynamicColor.withBrightness(
+            color: CupertinoColors.systemBlue,
+            darkColor: CupertinoColors.activeBlue,
+                ),scaffoldBackgroundColor: CupertinoDynamicColor.withBrightness(
+              color: CupertinoColors.systemGroupedBackground,
+              darkColor: CupertinoColors.black,
+            ),),
+          debugShowCheckedModeBanner: false,
+          home: HomeScreen(),
+                ),
         ),
-    ):CupertinoApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(toggleApp: toggleApp),
     );
   }
 

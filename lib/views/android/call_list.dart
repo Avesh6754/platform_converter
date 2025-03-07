@@ -87,7 +87,7 @@ class CallList extends StatelessWidget {
                                             contact[index].time;
 
                                         return AlertDialog(
-                                          title: Text("Add Task"),
+                                          title: Text("Update Data"),
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -114,21 +114,21 @@ class CallList extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 20),
                                               // ✅ Added spacing
-                                              textMethod(
+                                              textMethodMaterial(
                                                   controller:
                                                       homeController.txtName,
                                                   hint: 'Full Name',
                                                   isNumber: false,
                                                   iconData: Icon(
                                                       Icons.person_2_outlined)),
-                                              textMethod(
+                                              textMethodMaterial(
                                                   controller:
                                                       homeController.txtPhone,
                                                   hint: 'Phone Number',
                                                   isNumber: true,
                                                   iconData: Icon(
                                                       Icons.phone_outlined)),
-                                              textMethod(
+                                              textMethodMaterial(
                                                   controller:
                                                       homeController.txtChat,
                                                   hint: 'Chat Conversation',
@@ -167,7 +167,10 @@ class CallList extends StatelessWidget {
                                   },
                                   icon: Icon(Icons.delete))
                             ],
-                          )
+                          ),
+                          ElevatedButton(onPressed: () {
+                            Navigator.pop(context);
+                          }, child: Text('Cancel'))
                         ],
                       ),
                     );

@@ -1,18 +1,34 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:platform_converter/controller/homeController.dart';
-var homeController=Get.put(HomeController());
-class HomeScreen extends StatelessWidget {
-  final VoidCallback toggleApp;
+import 'package:platform_converter/views/ios/add_contact_page.dart';
+import 'package:platform_converter/views/ios/cupertinoCalling.dart';
+import 'package:platform_converter/views/ios/cupertinoUser.dart';
+import 'package:platform_converter/views/ios/cupertino_chat.dart';
 
-  const HomeScreen({super.key, required this.toggleApp});
+import '../android/user_profile.dart';
 
+var homeController = Get.put(HomeController());
+
+class HomeScreen extends StatefulWidget {
+
+
+  const HomeScreen({super.key, });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    profileController.getData();
+  }
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
-      resizeToAvoidBottomInset: false,
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
@@ -36,26 +52,56 @@ class HomeScreen extends StatelessWidget {
       tabBuilder: (context, index) {
         return CupertinoTabView(
           builder: (context) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-
-                automaticBackgroundVisibility: false,
-                middle: Text(
-                  'Platform Converter',
-                  style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
-                ),
-              ),
-              child: SafeArea(
-                child: Center(
-                  child: CupertinoButton(
-                    child: Text("Index of ${index + 1}"),
-                    onPressed: () {
-                      toggleApp();
-                    },
+            switch (index) {
+              case 0:
+                return CupertinoPageScaffold(
+                  resizeToAvoidBottomInset: true,
+                  navigationBar: CupertinoNavigationBar(
+                    trailing: Obx(() => CupertinoSwitch(value: homeController.isCupertino.value, onChanged: (value) {
+                        homeController.widgetChange(value);
+                      },),
+                    ),
+                    middle: Text('PlateForm Converter'),
                   ),
-                ),
-              ),
-            );
+                  child: AddContact_Page(),
+                );
+              case 1:
+                return CupertinoPageScaffold(
+                  resizeToAvoidBottomInset: true,
+                  navigationBar: CupertinoNavigationBar(
+                    middle: Text('PlateForm Converter'),
+                    trailing: Obx(() => CupertinoSwitch(value: homeController.isCupertino.value, onChanged: (value) {
+                      homeController.widgetChange(value);
+                    },),
+                    ),
+                  ),
+                  child: CupertinoChat(),
+                );
+              case 2:
+                return CupertinoPageScaffold(
+                  resizeToAvoidBottomInset: true,
+                  navigationBar: CupertinoNavigationBar(
+                    middle: Text('PlateForm Converter'),
+                    trailing: Obx(() => CupertinoSwitch(value: homeController.isCupertino.value, onChanged: (value) {
+                      homeController.widgetChange(value);
+                    },),
+                    ),
+                  ),
+                  child: CupertinoCalling(),
+                );
+              default:
+                return CupertinoPageScaffold(
+                  resizeToAvoidBottomInset: true,
+                  navigationBar: CupertinoNavigationBar(
+                    middle: Text('PlateForm Converter'),
+                    trailing: Obx(() => CupertinoSwitch(value: homeController.isCupertino.value, onChanged: (value) {
+                      homeController.widgetChange(value);
+                    },),
+                    ),
+                  ),
+                  child: CupertinoUser(),
+                );
+            }
           },
         );
       },

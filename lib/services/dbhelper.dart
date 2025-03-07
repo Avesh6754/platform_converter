@@ -10,6 +10,7 @@ class DbHelper {
   Database? _database;
 
   final _contactTable = 'contact';
+  final _userTable = 'user';
 
   Future<Database> get database async {
     if (_database != null) {
