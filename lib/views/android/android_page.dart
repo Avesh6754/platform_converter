@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:platform_converter/views/android/add_contact.dart';
+import 'package:platform_converter/views/android/call_list.dart';
+import 'package:platform_converter/views/android/chatslist.dart';
+import 'package:platform_converter/views/android/user_profile.dart';
 
 class TabBarWithPageView extends StatelessWidget {
   const TabBarWithPageView({super.key, required this.toggleApp});
@@ -30,13 +33,9 @@ class TabBarWithPageView extends StatelessWidget {
         body: TabBarView(
           children: [
             AddContact(),
-            Center(child: Text("Home Screen", style: TextStyle(fontSize: 24))),
-            Center(
-              child: Text("Favorites Screen", style: TextStyle(fontSize: 24)),
-            ),
-            Center(
-              child: Text("Settings Screen", style: TextStyle(fontSize: 24)),
-            ),
+            ChatsList(),
+            CallList(),
+            UserProfile(),
           ],
         ),
       ),

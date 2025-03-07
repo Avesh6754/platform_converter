@@ -38,6 +38,7 @@ class HomeScreen extends StatelessWidget {
           builder: (context) {
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
+
                 automaticBackgroundVisibility: false,
                 middle: Text(
                   'Platform Converter',

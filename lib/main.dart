@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:platform_converter/views/android/android_page.dart';
+import 'package:platform_converter/views/android/user_profile.dart';
 import 'package:platform_converter/views/ios/ios_page.dart';
 
 void main() {
@@ -19,14 +21,18 @@ class _MyIosAppState extends State<MyIosApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return isMaterial?Obx(
+      () => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: profileController.isDark.value ? ThemeMode.dark : ThemeMode.light,
+          home: TabBarWithPageView(toggleApp: toggleApp),
+        ),
+    ):CupertinoApp(
       debugShowCheckedModeBanner: false,
-      home: TabBarWithPageView(toggleApp: toggleApp),
+      home: HomeScreen(toggleApp: toggleApp),
     );
-    //     : CupertinoApp(
-    //   debugShowCheckedModeBanner: false,
-    //   home: HomeScreen(toggleApp: toggleApp),
-    // );
   }
 
   void toggleApp() {

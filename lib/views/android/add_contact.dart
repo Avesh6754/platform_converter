@@ -5,9 +5,20 @@ import 'package:platform_converter/controller/homeController.dart';
 
 import '../ios/ios_page.dart';
 
-class AddContact extends StatelessWidget {
+class AddContact extends StatefulWidget {
   const AddContact({super.key});
 
+  @override
+  State<AddContact> createState() => _AddContactState();
+}
+
+class _AddContactState extends State<AddContact> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    homeController.setAllData();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -23,9 +34,8 @@ class AddContact extends StatelessWidget {
               child: Obx(
                 () => CircleAvatar(
                   radius: 80,
-                  backgroundImage: (homeController.contactImage.isEmpty)
-                      ? NetworkImage(
-                          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')
+                  backgroundImage: homeController.contactImage.isEmpty
+                      ? const AssetImage('assets/image/1.jpg')
                       : FileImage(File(homeController.contactImage.value))
                           as ImageProvider,
                 ),
@@ -58,7 +68,7 @@ class AddContact extends StatelessWidget {
                           },
                           icon: Icon(Icons.date_range)),
                       (controller.pickDate != null)
-                          ? Text(controller.contactDate!)
+                          ? Text(controller.contactDate ?? 'Pick Date')
                           : Text('Pick Date')
                     ],
                   ),
@@ -70,7 +80,7 @@ class AddContact extends StatelessWidget {
                           },
                           icon: Icon(Icons.access_time)),
                       (controller.timePick != null)
-                          ? Text(controller.contactTime!)
+                          ? Text(controller.contactTime ?? "Pick Time")
                           : Text('Pick Time')
                     ],
                   ),
@@ -83,6 +93,7 @@ class AddContact extends StatelessWidget {
                   if ((homeController.txtPhone.text.isNotEmpty) &&
                       (homeController.txtChat.text.isNotEmpty) &&
                       (homeController.txtName.text.isNotEmpty)) {
+                    print(homeController.contactImage.value);
                     await homeController.addContactData();
                     homeController.setAllData();
                   }
@@ -93,24 +104,23 @@ class AddContact extends StatelessWidget {
       ),
     );
   }
-
-  Padding textMethod(
-      {required String hint,
+}
+Padding textMethod(
+    {required String hint,
       required TextEditingController controller,
       required bool isNumber,
       required var iconData}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0), // ✅ Spacing
-      child: TextField(
-        controller: controller,
-        keyboardType: (isNumber) ? TextInputType.number : TextInputType.text,
-        decoration: InputDecoration(
-          prefixIcon: iconData,
-          hintText: hint,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          hintStyle: TextStyle(fontWeight: FontWeight.w500),
-        ),
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0), // ✅ Spacing
+    child: TextField(
+      controller: controller,
+      keyboardType: (isNumber) ? TextInputType.number : TextInputType.text,
+      decoration: InputDecoration(
+        prefixIcon: iconData,
+        hintText: hint,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        hintStyle: TextStyle(fontWeight: FontWeight.w500),
       ),
-    );
-  }
+    ),
+  );
 }

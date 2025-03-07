@@ -1,4 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,13 +59,14 @@ class HomeController extends GetxController {
     contactImage.value = contactUserImage.path;
   }
 
-  Future<void> fetchData() async {
-    final data = await DbHelper.dbHelper.fetchData();
+  Future<List<ContactModal>?> fetchData() async {
+    final data = await DbHelper.dbHelper.fetchDataFromDatabase();
     contactList.value = data
         .map(
           (e) => ContactModal.fromMap(e),
         )
         .toList();
+    return contactList;
   }
 
   Future<void> addContactData() async {
@@ -76,20 +79,40 @@ class HomeController extends GetxController {
         time: timePick.toString());
     await DbHelper.dbHelper.insertData(contact);
     await fetchData();
-
   }
 
-  Future<void> updateContactData(contact) async {
-    await DbHelper.dbHelper.insertData(contact);
-    await fetchData();
+  Future<void> updateContactData(ContactModal contact) async {
+    contact.name = txtName.text;
+    contact.time = TimeOfDay.now().toString();
+    contact.date = DateTime.now().toString();
+    contact.phone = txtPhone.text;
+    contact.image = contactImage.value;
+    contact.chat = txtChat.text;
+
+    try {
+      await DbHelper.dbHelper.updateData(contact);
+      await fetchData();
+    } catch (e) {
+      log('not update');
+    }
   }
 
   void setAllData() {
     txtName.clear();
     txtChat.clear();
     txtPhone.clear();
-    contactTime=null;
-    contactDate=null;
-    contactImage.value='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    contactTime = null;
+    contactDate = null;
+    contactImage.value = 'assets/image/1.jpg';
+  }
+
+  Future<void> deleteDataFromList(int id) async {
+    try {
+      await DbHelper.dbHelper.deleteData(id);
+      await fetchData();
+    } catch (e) {
+      log('not delete');
+    }
+
   }
 }

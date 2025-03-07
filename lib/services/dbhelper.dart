@@ -37,6 +37,8 @@ class DbHelper {
 
   Future<void> updateData(ContactModal contact) async {
     final db = await database;
+
+
     await db.update(_contactTable, ContactModal.toMap(contact),
         where: "id=?", whereArgs: [contact.id]);
   }
@@ -46,7 +48,7 @@ class DbHelper {
     await db.delete(_contactTable, where: "id=?", whereArgs: [id]);
   }
 
-  Future<List<Map<String, Object?>>> fetchData() async {
+  Future<List<Map<String, Object?>>> fetchDataFromDatabase() async {
     final db = await database;
     return await db.query(_contactTable);
   }
