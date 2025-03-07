@@ -1,9 +1,4 @@
-# platform_converter
 
-A new Flutter project.
-Here's a well-structured **README** description for your **Platform Converter App** with **emoji** and details about **SQL-based data storage**:  
-
----
 
 # 📱 Platform Converter App  
 
